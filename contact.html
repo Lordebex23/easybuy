@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Shop - EasyBuy</title>
+  <meta name="description" content="Shop accessible and inclusive products at EasyBuy.">
+  <meta name="keywords" content="accessible ecommerce, inclusive shopping, adaptive products">
+  <meta name="author" content="EasyBuy Team">
+  <link rel="icon" href="Untitled-1.png" type="image/png" sizes="16x16">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="flex justify-between items-center p-6 flex-wrap">
+      <div class="flex items-center space-x-4">
+        <img src="Untitled-2.png" class="h-10 w-auto" alt="EasyBuy Logo">
+        <span class="text-2xl font-bold text-purple-700">EasyBuy</span>
+      </div>
+      
+      <!-- Mobile Toggle -->
+      <button id="menu-toggle" class="md:hidden text-purple-700 ml-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <!-- Nav Links -->
+      <ul id="mobile-menu" class="hidden w-full md:flex md:w-auto md:items-center space-y-4 md:space-y-0 md:space-x-6 text-base font-medium mt-4 md:mt-0">
+        <li><a href="index.html" class="hover:text-purple-600">Home</a></li>
+        <li><a href="shop.html" class="text-purple-600 font-semibold">Shop</a></li>
+        <li><a href="about.html" class="hover:text-purple-600">About</a></li>
+        <li><a href="contact.html" class="hover:text-purple-600">Contact</a></li>
+        
+        <!-- Search Bar -->
+        <li>
+          <form onsubmit="event.preventDefault(); searchProducts()" class="flex items-center bg-gray-100 rounded-full px-3">
+            <input type="text" id="navSearchInput" placeholder="Search..." class="bg-transparent focus:outline-none text-sm px-2 py-1">
+            <button type="submit" class="text-purple-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.5 10.5a6 6 0 11-12 0 6 6 0 0112 0z" />
+              </svg>
+            </button>
+          </form>
+        </li>
+
+        <!-- Cart Icon -->
+        <li>
+          <a href="cart.html" class="text-purple-600 hover:text-purple-800 relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13L17 13M7 13h10" />
+            </svg>
+            <span id="cartCount" class="absolute -top-2 -right-2 text-xs bg-red-600 text-white rounded-full px-1 hidden">0</span>
+          </a>
+        </li>
+
+        <!-- Login/Signup Buttons -->
+        <li><a href="login.html" class="bg-purple-600 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-700">Log in</a></li>
+        <li><a href="signup.html" class="bg-purple-600 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-700">Sign Up Free</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- Hero Section -->
+  <section class="bg-purple-100 py-16">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl font-extrabold text-purple-700 mb-4">Welcome to EasyBuy</h1>
+      <p class="text-lg text-gray-700 mb-8">Your one-stop shop for accessible and inclusive products.</p>
+      <a href="shop.html" class="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition duration-300">Start Shopping</a>
+    </div>  
+
+  <!-- Contact Page -->
+  <main class="py-20 px-6 max-w-4xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mb-6">Get in Touch</h1>
+    <p class="text-center text-lg text-gray-700 mb-12">
+      Whether you have questions, feedback, or need accessibility support — we're here to help.
+    </p>
+    <form class="space-y-6 bg-white p-8 rounded-lg shadow-md" aria-label="Contact form">
+      <div>
+        <label for="name" class="block text-sm font-semibold text-gray-700">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required
+               class="w-full px-4 py-2 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-semibold text-gray-700">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required
+               class="w-full px-4 py-2 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+
+      <div>
+        <label for="subject" class="block text-sm font-semibold text-gray-700">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="What is your message about?" required
+               class="w-full px-4 py-2 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-semibold text-gray-700">Message</label>
+        <textarea id="message" name="message" rows="6" placeholder="Write your message here..." required
+                  class="w-full px-4 py-2 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-purple-600 text-white font-semibold py-3 px-6 rounded hover:bg-purple-700 transition duration-300">
+        Send Message
+      </button>
+    </form>
+
+    <div class="text-center mt-10 text-gray-600">
+      <p>Prefer to email us directly? <a href="mailto:support@easybuy.com" class="text-purple-600 hover:underline">support@easybuy.com</a></p>
+      <p>Or call: <a href="tel:+2348001234567" class="text-purple-600 hover:underline">+234 800 123 4567</a></p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-sm text-gray-500 bg-purple-100 mt-20">
+    &copy; 2025 EasyBuy. All rights reserved. | <a href="#" class="text-purple-600 hover:underline">Privacy Policy</a> | <a href="#" class="text-purple-600 hover:underline">Terms of Use</a>
+  </footer>
+
+  <script>
+  function searchProducts() {
+    const query = document.getElementById("navSearchInput").value.toLowerCase();
+    const cards = document.querySelectorAll("#productGrid > div");
+    cards.forEach(card => {
+      const title = card.querySelector("h3").innerText.toLowerCase();
+      card.style.display = title.includes(query) ? "block" : "none";
+    });
+  }
+</script>
+  <script>
+    // Show search bar on larger screens
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchForm = document.querySelector("form");
+      if (window.innerWidth >= 768) {
+        searchForm.classList.remove("hidden");
+      }
+    });
+  </script>
+
+  <script>
+  let cartCount = 0;
+
+  // Fake demo function — increase cart count on "Add to Cart"
+  document.querySelectorAll('button').forEach(btn => {
+    if (btn.innerText.trim() === 'Add to Cart') {
+      btn.addEventListener('click', () => {
+        cartCount++;
+        const badge = document.getElementById('cartCount');
+        badge.innerText = cartCount;
+        badge.classList.remove('hidden');
+      });
+    }
+  });
+</script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+</html>

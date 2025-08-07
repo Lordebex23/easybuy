@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Shop - EasyBuy</title>
+  <meta name="description" content="Shop accessible and inclusive products at EasyBuy.">
+  <meta name="keywords" content="accessible ecommerce, inclusive shopping, adaptive products">
+  <meta name="author" content="EasyBuy Team">
+  <link rel="icon" href="Untitled-1.png" type="image/png" sizes="16x16">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="flex justify-between items-center p-6 flex-wrap">
+      <div class="flex items-center space-x-4">
+        <img src="Untitled-2.png" class="h-10 w-auto" alt="EasyBuy Logo">
+        <span class="text-2xl font-bold text-purple-700">EasyBuy</span>
+      </div>
+      
+      <!-- Mobile Toggle -->
+      <button id="menu-toggle" class="md:hidden text-purple-700 ml-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <!-- Nav Links -->
+      <ul id="mobile-menu" class="hidden w-full md:flex md:w-auto md:items-center space-y-4 md:space-y-0 md:space-x-6 text-base font-medium mt-4 md:mt-0">
+        <li><a href="index.html" class="hover:text-purple-600">Home</a></li>
+        <li><a href="shop.html" class="text-purple-600 font-semibold">Shop</a></li>
+        <li><a href="about.html" class="hover:text-purple-600">About</a></li>
+        <li><a href="contact.html" class="hover:text-purple-600">Contact</a></li>
+        
+        <!-- Search Bar -->
+        <li>
+          <form onsubmit="event.preventDefault(); searchProducts()" class="flex items-center bg-gray-100 rounded-full px-3">
+            <input type="text" id="navSearchInput" placeholder="Search..." class="bg-transparent focus:outline-none text-sm px-2 py-1">
+            <button type="submit" class="text-purple-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.5 10.5a6 6 0 11-12 0 6 6 0 0112 0z" />
+              </svg>
+            </button>
+          </form>
+        </li>
+
+        <!-- Cart Icon -->
+        <li>
+          <a href="cart.html" class="text-purple-600 hover:text-purple-800 relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13L17 13M7 13h10" />
+            </svg>
+            <span id="cartCount" class="absolute -top-2 -right-2 text-xs bg-red-600 text-white rounded-full px-1 hidden">0</span>
+          </a>
+        </li>
+
+        <!-- Login/Signup Buttons -->
+        <li><a href="login.html" class="bg-purple-600 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-700">Log in</a></li>
+        <li><a href="signup.html" class="bg-purple-600 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-700">Sign Up Free</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Cart Section -->
+  <main class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Your Shopping Cart</h1>
+
+    <div id="cartItems" class="space-y-6">
+      <!-- Dynamic cart items will appear here -->
+    </div>
+
+    <div class="mt-10 border-t pt-6 text-right">
+      <h2 class="text-2xl font-semibold">Total: <span id="cartTotal">₦0</span></h2>
+      <button class="mt-4 bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700" onclick="checkout()">Proceed to Payment</button>
+    </div>
+
+    <div id="orderSummary" class="mt-10 hidden bg-white shadow-md rounded-lg p-6">
+      <h3 class="text-xl font-bold mb-4">Order Summary</h3>
+      <ul id="summaryList" class="list-disc list-inside text-gray-700"></ul>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-sm text-gray-500 bg-purple-100">
+    &copy; 2025 EasyBuy. All rights reserved.
+  </footer>
+
+  <script>
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalDisplay = document.getElementById('cartTotal');
+    const orderSummary = document.getElementById('orderSummary');
+    const summaryList = document.getElementById('summaryList');
+
+    function renderCart() {
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+
+      if (cartData.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+        cartTotalDisplay.textContent = '₦0';
+        orderSummary.classList.add('hidden');
+        return;
+      }
+
+      cartData.forEach((item, index) => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'bg-white shadow rounded-lg p-4 flex justify-between items-center';
+        itemElement.innerHTML = `
+          <div>
+            <h3 class="text-lg font-semibold">${item.name}</h3>
+            <p class="text-gray-500">₦${item.price}</p>
+          </div>
+          <button onclick="removeItem(${index})" class="text-red-600 hover:underline">Remove</button>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+        total += item.price;
+      });
+
+      cartTotalDisplay.textContent = `₦${total.toLocaleString()}`;
+    }
+
+    function removeItem(index) {
+      cartData.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cartData));
+      renderCart();
+    }
+
+    function checkout() {
+      summaryList.innerHTML = '';
+      cartData.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - ₦${item.price.toLocaleString()}`;
+        summaryList.appendChild(li);
+      });
+      orderSummary.classList.remove('hidden');
+      alert('Order placed successfully! Showing summary below.');
+      // Optional: Clear cart after checkout
+      // localStorage.removeItem('cart');
+    }
+
+    // Save product from home or shop pages
+    function addToCart(name, price) {
+      cartData.push({ name, price });
+      localStorage.setItem('cart', JSON.stringify(cartData));
+      alert(`${name} has been added to your cart.`);
+    }
+
+    renderCart();
+  </script>
+
+</body>
+</html>
+  <script>
+    function searchProducts() {
+      const query = document.getElementById("navSearchInput").value.toLowerCase();
+      const cards = document.querySelectorAll("#productGrid > div");
+      cards.forEach(card => {
+        const title = card.querySelector("h3").innerText.toLowerCase();
+        card.style.display = title.includes(query) ? "block" : "none";
+      });
+    }
+  </script>
+
+  <script>
+    // Show search bar on larger screens
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchForm = document.querySelector("form");
+      if (window.innerWidth >= 768) {
+        searchForm.classList.remove("hidden");
+      }
+    });
+  </script>
+
+  <script>
+    let cartCount = 0;
+
+    // Fake demo function — increase cart count on "Add to Cart"
+    document.querySelectorAll('button').forEach(btn => {
+      if (btn.innerText.trim() === 'Add to Cart') {
+        btn.addEventListener('click', () => {
+          cartCount++;
+          const badge = document.getElementById('cartCount');
+          badge.innerText = cartCount;
+          badge.classList.remove('hidden');
+        });
+      }
+    });
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+
+<script>
+  function addToCart(name, price) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({ name, price });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${name} has been added to your cart.`);
+  }
+</script> 
+
+  
+</body>
+</html>

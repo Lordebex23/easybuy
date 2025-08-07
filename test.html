@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EasyBuy - Accessible E-commerce</title>
+  <script defer>
+    // Function to handle product search
+    function searchProducts() {
+      const input = document.getElementById("navSearchInput").value.toLowerCase();
+      const products = document.querySelectorAll(".product-item");
+      let found = false;
+
+      products.forEach(product => {
+        const name = product.querySelector(".product-name").textContent.toLowerCase();
+        if (name.includes(input)) {
+          product.style.display = "block";
+          product.style.backgroundColor = "#e0f7fa"; // highlight found item
+          found = true;
+        } else {
+          product.style.display = "none";
+          product.style.backgroundColor = "";
+        }
+      });
+
+      const notFoundMessage = document.getElementById("notFoundMessage");
+      if (!found) {
+        notFoundMessage.style.display = "block";
+      } else {
+        notFoundMessage.style.display = "none";
+      }
+    }
+
+    // Voice Search Integration
+    function startVoiceSearch() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Your browser does not support speech recognition.");
+        return;
+      }
+
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("navSearchInput").value = transcript;
+        searchProducts(); // Trigger the search automatically
+      };
+
+      recognition.onerror = function (event) {
+        console.error("Speech recognition error", event.error);
+      };
+
+      recognition.start();
+    }
+  </script>
+
+  <script>
+    // Optional: Automatically read content aloud when page loads
+    window.onload = () => {
+      const msg = new SpeechSynthesisUtterance("Welcome to EasyBuy, your accessible e-commerce platform. Use the search bar to find products or press the microphone icon to search with your voice.");
+      window.speechSynthesis.speak(msg);
+    };
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen font-sans">
+  <!-- Header and Search Form -->
+  <header class="bg-white shadow p-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <h1 class="text-xl font-bold text-purple-600">EasyBuy</h1>
+      <form onsubmit="event.preventDefault(); searchProducts()" class="flex items-center bg-gray-100 rounded-full px-3">
+        <input type="text" id="navSearchInput" placeholder="Search..." class="bg-transparent focus:outline-none text-sm px-2 py-1" />
+        <button type="submit" class="text-purple-600 ml-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.5 10.5a6 6 0 11-12 0 6 6 0 0112 0z" />
+          </svg>
+        </button>
+        <button type="button" onclick="startVoiceSearch()" class="text-purple-600 ml-2" title="Voice Search">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 14a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z" />
+            <path d="M19 11a7 7 0 01-14 0" />
+            <path d="M12 18v3m0 0h-3m3 0h3" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Product List -->
+  <main class="max-w-4xl mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <!-- Example product -->
+    <div class="product-item bg-white p-4 shadow rounded" data-name="iphone">
+      <h2 class="product-name text-lg font-semibold">iPhone 13</h2>
+      <p class="text-sm text-gray-600">Powerful smartphone with A15 Bionic chip</p>
+    </div>
+    <div class="product-item bg-white p-4 shadow rounded" data-name="laptop">
+      <h2 class="product-name text-lg font-semibold">HP Pavilion Laptop</h2>
+      <p class="text-sm text-gray-600">15.6-inch, Intel Core i5, 8GB RAM</p>
+    </div>
+    <div class="product-item bg-white p-4 shadow rounded" data-name="headphones">
+      <h2 class="product-name text-lg font-semibold">Wireless Headphones</h2>
+      <p class="text-sm text-gray-600">Noise-cancelling Bluetooth headphones</p>
+    </div>
+    <div class="product-item bg-white p-4 shadow rounded" data-name="smartwatch">
+      <h2 class="product-name text-lg font-semibold">Samsung Galaxy Watch</h2>
+      <p class="text-sm text-gray-600">Health tracking and notifications</p>
+    </div>
+    <!-- Add more products as needed -->
+  </main>
+
+  <!-- Not Found Message -->
+  <div id="notFoundMessage" class="text-center text-red-500 text-sm mt-4 hidden">
+    No products match your search.
+  </div>
+</body>
+</html>
